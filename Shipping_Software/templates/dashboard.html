@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Dashboard
+{% endblock %}
+
+{% block content %}
+  <div class="container-fluid">
+    <div class="row">
+      {% include 'navbar.html' %}
+      <!-- Main content -->
+      <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+        <h2>Welcome, {{ user.username }}</h2>
+
+        <div class="my-4 bg-light p-3">
+          <h3 class="text-secondary">Your Quotations</h3>
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>ID</th>
+                  <th>Type</th>
+                  <th>Commodity</th>
+                  <th>Gross Wt.</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for quotation in user_quotations.items %}
+                  <tr>
+                    <td>{{ (user_quotations.page - 1) * user_quotations.per_page + loop.index }}</td>
+                    <td>{{ quotation.id }}</td>
+                    <td>{{ quotation.shippment_type }}</td>
+                    <td>{{ quotation.commodity }}</td>
+                    <td>{{ quotation.gross_weight }}</td>
+                    <td>{{ quotation.status }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            {% if (user_quotations.items|length) == 0 %}
+              <p>No quotations found.</p>
+            {% endif %}
+            <div>
+              {% if user_quotations.has_prev %}
+                <a href="{{ url_for('dashboard.dashboard', page=user_quotations.prev_num) }}" class="btn btn-primary">Previous</a>
+              {% endif %}
+              {% if user_quotations.has_next %}
+                <a href="{{ url_for('dashboard.dashboard', page=user_quotations.next_num) }}" class="btn btn-primary">Next</a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+{% endblock %}

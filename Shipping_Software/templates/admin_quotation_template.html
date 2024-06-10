@@ -1,0 +1,314 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Quotation Template
+{% endblock %}
+
+{% block content %}
+  <div class="container-fluid">
+    <div class="row">
+      {% include 'navbar.html' %}
+      <!-- Main content -->
+      <link rel="stylesheet" href="{{ url_for('static', filename='quotationPDF.css') }}">      
+      
+      <div id="main_content" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+        <form action="{{ url_for('admin_quotation_template.generate_pdf',quotation_id=quotation.id) }}" method="get">
+          <div class="color_bar"></div>
+          <div class="containerquote">
+            <div class="our-office">
+              <div class="logo-container">
+                <img alt="Logo" src="../static/logo2.png"/>
+                <div class="office-address">
+                  <div class="company-name">SPRINT</div>
+                  <div class="company-address">
+                    304 J tower cosmopoliten CHS <br />Takka Road-Panvel<br /> Navi Mumbai ,Maharastra-410206
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="customer">
+              <div class="date">DATE :</div>
+              <div class="quotation-no">
+                Quotation No.<Span class="quoate-number">{{ quotation.id }}</Span>
+              </div>
+
+              <div class="customer-details">
+                <div class="To">To,</div>
+                <div class="to_name">
+                  <strong>Name :</strong> <span class="name" contenteditable="true">{{ customer.username }}</span>
+                </div>
+                <div class="to_address">
+                  <strong>Address :</strong> <span class="address" contenteditable="true"></span>
+                </div>
+                <div class="to_cell">
+                  <strong>Cell :</strong> <span class="cell" contenteditable="true">{{ customer.phone_number }}</span>
+                </div>
+                <div class="to_email">
+                  <strong>Email :</strong> <span class="eamil" contenteditable="true">{{ customer.email }}</span>
+                </div>
+                <div class="to_GSTIN">
+                  <strong>GSTIN :</strong> <span class="gstin" contenteditable="true"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="quotation-container">
+            <div class="quotation">QUOTATION</div>
+          </div>
+          <div class="remark-container">
+            <div class="remark">Q
+              NOTE/REMARK : <span class="Remark">{{ quotation.remark }}</span>
+            </div>
+          </div>
+
+          <div class="etf-container">
+            <div class="etf">Your Estimate is based on the following :</div>
+          </div>
+
+          <div class="est-table-container">
+            <div class="est-table">
+              <table class="EST_TABLE">
+                <tr>
+                  <td class="hight_cell">Origin(POR)</td>
+                  <td>{{ quotation.port_of_receipt }}</td>
+                  <td class="hight_cell">Shipment Type</td>
+                  <td>{{ quotation.shippment_type }}</td>
+                </tr>
+                <tr>
+                  <td class="hight_cell">Origin Port(POL)</td>
+                  <td>{{ quotation.port_of_loading }}</td>
+                  <td class="hight_cell">Shipment Term</td>
+                  <td contenteditable="true"></td>
+                </tr>
+                <tr>
+                  <td class="hight_cell">Destination Port(POD)</td>
+                  <td>{{ quotation.port_of_discharge }}</td>
+                  <td class="hight_cell">Insurance Requried</td>
+                  <td contenteditable="true"></td>
+                </tr>
+                <tr>
+                  <td class="hight_cell">Final Delivery(FPOD)</td>
+                  <td>{{ quotation.final_place_of_delivery }}</td>
+                  <td class="hight_cell">Customs Duty(%)</td>
+                  <td contenteditable="true"></td>
+                </tr>
+                <tr>
+                  <td class="hight_cell">Commodity</td>
+                  <td>{{ quotation.commodity }}</td>
+                  <td class="hight_cell">Validity</td>
+                  <td contenteditable="true"></td>
+                </tr>
+                <tr>
+                  <td class="hight_cell">No of Pkgs</td>
+                  <td contenteditable="true"></td>
+                  <td class="hight_cell">Payment Terms</td>
+                  <td contenteditable="true"></td>
+                </tr>
+                <tr>
+                  <td class="hight_cell">Dimensions</td>
+                  <td contenteditable="true"></td>
+                  <td class="hight_cell">Ex Rate</td>
+                  <td id="exchange_rate" contenteditable="true"></td>
+                </tr>
+                <tr>
+                  <td class="hight_cell">Gross Cargo Weight</td>
+                  <td>{{ quotation.gross_weight }} Kgs</td>
+                  <td class="hight_cell">Country</td>
+                  <td>
+                    <select name="Country" id="Country">
+                      <option>Select Country</option>
+                      <option value="Country1">Country1</option>
+                      <option value="Country2">Country2</option>
+                      <option value="Country3">Country3</option>
+                      <option value="Country4">Country4</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="hight_cell">Weight/Cubic Measurement</td>
+                  <td contenteditable="true"></td>
+                  <td class="hight_cell"></td>
+                  <td></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          <div class="freight-charges-containers">
+            <div class="freight-charges">FREIGHT CHARGES</div>
+          </div>
+
+          <div class="freight-charges-table-container">
+            <table class="freight-charges-table">
+              <tr>
+                <td class="hight_cell" style="width: 2%;">S.No.</td>
+                <td class="hight_cell" style="width: 30%;">DESCRIPTION</td>
+                <td class="hight_cell" style="width: 8%;">HSN Code</td>
+                <td class="hight_cell" style="width: 3%;">QUANTITY</td>
+                <td class="hight_cell" style="width: 9%;">RATE</td>
+                <td class="hight_cell" style="width: 10%;">AMOUNT</td>
+                <td class="hight_cell" style="width: 5%;">PRE-PAID/COLLECT</td>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td contenteditable="true"></td>
+                <td contenteditable="true"></td>
+                <td id="freight_quantity" contenteditable="true"></td>
+                <td id="freight_rate" contenteditable="true"></td>
+                <td id="freight_amount"></td>
+                <td id="prepaid-collect">
+                  <select name="PrePaid-Collect" id="PrePaid-Collect">
+                    <option value="Pre Paid">Pre Paid</option>
+                    <option value="Collect">Collect</option>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td class="border_less_cell"></td>
+                <td class="border_less_cell"></td>
+                <td class="border_less_cell"></td>
+                <td class="border_less_cell"></td>
+                <td>INR &#x20B9;</td>
+                <td id="in_INR"></td>
+              </tr>
+              <tr>
+                <td class="border_less_cell"></td>
+                <td class="border_less_cell"></td>
+                <td class="border_less_cell"></td>
+                <td class="border_less_cell"></td>
+                <td>GST @ 5%</td>
+                <td id="GST5%"></td>
+              </tr>
+              <tr>
+                <td class="border_less_cell"></td>
+                <td class="border_less_cell"></td>
+                <td class="border_less_cell"></td>
+                <td class="border_less_cell"></td>
+                <td class="hight_cell">TOTAL AMOUNT</td>
+                <td id="freight_total" class="hight_cell"></td>
+              </tr>
+            </table>
+          </div>
+          <div class="Origin-Charges-container">
+            <div class="origin-charges">ORIGIN CHARGES</div>
+          </div>
+          <div class="origin-charges-table-container">
+            <table id="origin_Table" class="origin-charges-table">
+              <tr>
+                <td class="hight_cell" style="width: 2%;">S.No.</td>
+                <td class="hight_cell" style="width: 30%;">DESCRIPTION</td>
+                <td class="hight_cell" style="width: 8%;">HSN Code</td>
+                <td class="hight_cell" style="width: 3%;">QUANTITY</td>
+                <td class="hight_cell" style="width: 9%;">RATE</td>
+                <td class="hight_cell" style="width: 10%;">AMOUNT</td>
+                <td class="hight_cell" style="width: 5%;">PRE-PAID/COLLECT</td>
+              </tr>
+              <tr>
+                <td class="border_less_cell"></td>
+                <td class="border_less_cell row">
+                  <div class="addBtn printnone " onclick="addRow()">+</div><div class="removeBtn printnone" onclick="removeRow()">-</div>
+                </td>
+                <td class="border_less_cell"></td>
+                <td class="border_less_cell"></td>
+                <td class="hight_cell">TOTAL AMOUNT</td>
+                <td id="origin_total" class="hight_cell"></td>
+              </tr>
+              <tr>
+                <td class="border_less_cell"></td>
+                <td class="border_less_cell"></td>
+                <td class="border_less_cell"></td>
+                <td class="border_less_cell"></td>
+                <td>GST @ 18%</td>
+                <td id="18%GST"></td>
+              </tr>
+              <tr>
+                <td class="border_less_cell"></td>
+                <td class="border_less_cell"></td>
+                <td class="border_less_cell"></td>
+                <td class="border_less_cell"></td>
+                <td class="hight_cell">GRAND TOTAL</td>
+                <td id="Origin_Grand_Total" class="hight_cell"></td>
+              </tr>
+            </table>
+          </div>
+          <div class="Destination-Charges-container">
+            <div class="destination-charges">DESTINATION CHARGES</div>
+          </div>
+          <div class="destination-charges-table-container">
+            <table id="destination_table" class="destination-charges-table">
+              <tr>
+                <td class="hight_cell" style="width: 2%;">S.No.</td>
+                <td class="hight_cell" style="width: 30%;">DESCRIPTION</td>
+                <td class="hight_cell" style="width: 8%;">HSN Code</td>
+                <td class="hight_cell" style="width: 3%;">QUANTITY</td>
+                <td class="hight_cell" style="width: 9%;">RATE</td>
+                <td class="hight_cell" style="width: 10%;">AMOUNT</td>
+                <td class="hight_cell" style="width: 5%;">PRE-PAID/COLLECT</td>
+              </tr>
+              <tr>
+                <td class="border_less_cell"></td>
+                <td class="border_less_cell row">
+                  <div  class="addBtn printnone" onclick="addRow_destination_table()">+</div><div class="removeBtn printnone" onclick="removeRow_destination_table()">-</div>
+                </td>
+                <td class="border_less_cell"></td>
+                <td class="border_less_cell"></td>
+                <td class="hight_cell">TOTAL AMOUNT</td>
+                <td id="destination_total" class="hight_cell"></td>
+              </tr>
+            </table>
+          </div>
+          <div class="footer">
+            <div class="thanks">THANK YOU FOR YOUR BUSINESS !</div>
+            <div class="sign">Signature / Stamp :</div>
+            <div class="place">Place :</div>
+            <div class="footer-date">Date :</div>
+          </div>
+
+          <div class="color_bar"></div>
+
+          <div class="new_page">
+            <div id="color_bar_forPrint" style="margin-top: 10px;"></div>
+
+            <div class="condition-container">
+              <div class="condition">CONDITIONS OF ESTIMATE</div>
+            </div>
+
+            <div class="points-container">
+              <div class="points">
+                <p>Subject to cargo acceptance at the time of booking.</p>
+                <p>Subject to technical drawings & 4 weeks notice required for ops planning.</p>
+                <p>Shipper to arrange loading of the cargo at origin.</p>
+                <p>The exchange rate is determined by the daily ROE and may vary.</p>
+                <p>The provided estimate relies on the information provided by you, C. Steinweg Logistics cannot be held responsible for any inaccuracies in the information. Unless otherwise specified, insurance is not included in the estimate.</p>
+                <p>Errors and omissions are not covered.</p>
+                <p>Agency fee and Facility fee to increase once Customs Duty and Customs VAT are taken into account.</p>
+                <p>Consignee to arrange final clearance and payment of Duties & Taxes in advance.</p>
+                <p>2 Days are allowed for border clearance, thereafter standing time of ZAR 20 000 per day, will apply.</p>
+                <p>Consignee to arrange unpack / offloading at final destination.</p>
+                <p>1Day allowed for unpack, thereafter standing time of ZAR 20 000 per day, will apply. Third-party increases may occur with or without prior notice and are beyond our control.</p>
+                <p>The estimate does not cover storage, survey, customs inspection, or any unforeseen expenses.</p>
+                <p>Our offer is not binding until a final transport agreement has been reached.</p>
+                <p>The offer is subject to the standard and unchanged conditions of transport, prevailing exchange rates, and current tariffs.</p>
+                <p>Our offers are governed by the Standard Trading Conditions of C. Steinweg Logistics. A copy can be provided upon request.</p>
+                <p>Finance options are available only through prior arrangement and approval of credit via a Credit Application Form.</p>
+                <p>If no credit facility is established, payment must be made upon invoice.</p>
+                <p>Acceptance of this proposal, unless otherwise agreed by the parties in writing and signed, shall be deemed to be accepted of C. Steinweg Bridge Standard Trading Terms and Conditions (attached hereto).</p>
+                <p>Kindly signify your acceptance by signing below and returning same to sender asap.</p>
+              </div>
+            </div>
+            <div class="acceptedby-container">
+              <div class="accepedby">ACCEPTED BY :</div>
+              <div class="accepedby-sign">SIGNATURE :</div>
+              <div class="accepedby-date">DATE :</div>
+            </div>
+            <div class="color_bar" style="margin-top: 20px;"></div>
+          </div>
+          <button id="generate-pdf-btn" class="btn btn-primary printnone">Generate PDF</button>
+        </form>
+      </div>
+
+      <script src="{{ url_for('static', filename='quotation.js') }}"></script>
+      
+    </div>
+  </div>
+  
+{% endblock %}

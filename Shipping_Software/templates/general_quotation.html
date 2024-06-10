@@ -1,0 +1,593 @@
+{% extends 'base.html' %} {% block title %}
+  General Quotation
+{% endblock %} {% block content %}
+  <div class="container-fluid">
+    <div class="row">
+      {% include 'navbar.html' %}
+      <!-- Main content -->
+      <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+        <div class="container mt-5">
+          <h2>Quotation Form</h2>
+          <div class="form-group">
+            <label for="quotationType">Type of Shipment:</label>
+            <select class="form-control" id="quotationType" name="shipment_type">
+              <option>Select Type of Shippment</option>
+              <option value="LCL">LCL</option>
+              <option value="FCL">FCL</option>
+              <option value="BB">BB</option>
+              <option value="Air">Air</option>
+            </select>
+          </div>
+
+          <form action="/general_quotation_LCL" method="post" id="LCL_form" style="display: none">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="portOfReceipt">Port of Receipt</label>
+                  <input type="text" class="form-control" id="portOfReceipt" name="port_of_receipt" required />
+                </div>
+                <div class="form-group">
+                  <label for="portOfLoading">Port of Loading</label>
+                  <input type="text" class="form-control" id="portOfLoading" name="port_of_loading" required />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="portOfDischarge">Port of Discharge</label>
+                  <input type="text" class="form-control" id="portOfDischarge" name="port_of_discharge" required />
+                </div>
+                <div class="form-group">
+                  <label for="finalPlaceOfDelivery">Final Place of Delivery</label>
+                  <input type="text" class="form-control" id="finalPlaceOfDelivery" name="final_place_of_delivery" required />
+                </div>
+              </div>
+            </div>
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input" id="haz" name="commodity_type" />
+              <label class="form-check-label" for="haz">Hazardous</label>
+            </div>
+            <div id="hazFields" style="display: none">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="fclUnNumber">UN Number</label>
+                    <select class="form-control" id="fclUnNumber" name="un_number">
+                      <option></option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="fclClass">Class</label>
+                    <select class="form-control" id="fclClass" name="haz_class">
+                      <option></option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="commodities">Commodities</label>
+              <select class="form-control" id="commodities" name="commodity" required>
+                <option></option>
+                <option value="commodity1">Commodity 1</option>
+                <option value="commodity2">Commodity 2</option>
+                <option value="commodity3">Commodity 3</option>
+                <option value="commodity4">Commodity 4</option>
+              </select>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="grossWeight">Gross Weight</label>
+              <input type="text" class="form-control" id="grossWeight" name="gross_weight" required />
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label for="cbmCalculator">
+                    CBM Calculator
+                    <span class="alert-danger">Please Enter the values in Centimeter !</span>
+                  </label>
+                  <div class="row" style="border: 1px solid #ccc; padding: 10px">
+                    <div class="col">
+                      <label for="height">Height</label>
+                      <input type="text" class="form-control" id="height" name="height" placeholder="in cm" />
+                    </div>
+                    <div class="col">
+                      <label for="breadth">Breadth</label>
+                      <input type="text" class="form-control" id="breadth" name="breadth" placeholder="in cm" />
+                    </div>
+                    <div class="col">
+                      <label for="length">Length</label>
+                      <input type="text" class="form-control" id="length" name="length" placeholder="in cm" />
+                    </div>
+                    <div class="col">
+                      <label for="numberOfPackages">Number of Packages</label>
+                      <input type="text" class="form-control" id="numberOfPackages" name="number_of_packages" required />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="cbm">CBM</label>
+                <input type="text" class="form-control" id="cbm" name="cbm" required />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="remark">More Information</label>
+              <textarea class="form-control" id="remark" name="remark" rows="3" placeholder="Any Special Request"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+
+          <form action="/general_quotation_FCL" method="post" id="FCL_form" style="display: none">
+            <input type="hidden" id="fcl_hidden_shipment_type" name="shippment_type" style="display: none" />
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="portOfReceipt">Port of Receipt</label>
+                  <input type="text" class="form-control" id="portOfReceipt" name="port_of_receipt" required />
+                </div>
+                <div class="form-group">
+                  <label for="portOfLoading">Port of Loading</label>
+                  <input type="text" class="form-control" id="portOfLoading" name="port_of_loading" required />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="portOfDischarge">Port of Discharge</label>
+                  <input type="text" class="form-control" id="portOfDischarge" name="port_of_discharge" required />
+                </div>
+                <div class="form-group">
+                  <label for="finalPlaceOfDelivery">Final Place of Delivery</label>
+                  <input type="text" class="form-control" id="finalPlaceOfDelivery" name="final_place_of_delivery" required />
+                </div>
+              </div>
+            </div>
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input" id="fclHaz" name="commodity_type" />
+              <label class="form-check-label" for="fclHaz">Hazardous</label>
+            </div>
+            <div id="fclHazFields" style="display: none">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="fclUnNumber">UN Number</label>
+                    <select class="form-control" id="fclUnNumber" name="un_number">
+                      <option></option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="fclClass">Class</label>
+                    <select class="form-control" id="fclClass" name="haz_class">
+                      <option></option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-md-10">
+                <div class="containerInputs" style="border: 1px solid #ccc; padding: 10px">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <label for="containerType">Type of Container</label>
+                      <select class="form-control containerType" id="containerType">
+                        <option>Select Container Type</option>
+                        <option value="20-foot">20-foot</option>
+                        <option value="40-foot">40-foot</option>
+                        <option value="45-foot">45-foot</option>
+                      </select>
+                    </div>
+                    <div class="col-md-6">
+                      <label for="numberOfContainers">Number of Containers</label>
+                      <input type="number" class="form-control numberOfContainers" id="numberOfContainers" value="0" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-2">
+                <button type="button" class="btn btn-primary mr-2 addContainer">+</button>
+                <button type="button" class="btn btn-danger removeContainer">-</button>
+              </div>
+            </div>
+
+            <div class="form-group col-md-6">
+              <label for="commodities">Commodities</label>
+              <select class="form-control" id="commodities" name="commodity" required>
+                <option>Type of Commodity</option>
+                <option value="commodity1">Commodity 1</option>
+                <option value="commodity2">Commodity 2</option>
+                <option value="commodity3">Commodity 3</option>
+                <option value="commodity4">Commodity 4</option>
+              </select>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="grossWeight">Gross Weight</label>
+              <input type="text" class="form-control" id="grossWeight" name="gross_weight" required />
+            </div>
+
+            <div class="form-group">
+              <label for="remark">More Information</label>
+              <textarea class="form-control" id="remark" name="remark" rows="3" placeholder="Any Special Request"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <textarea style="display: none;" id="allcontainerType" name="container_type"></textarea>
+            <textarea style="display: none;" id="allnumberOfContainers" name="number_of_containers"></textarea>
+          </form>
+
+          <form action="/general_quotation_BB" method="post" id="BB_form" style="display: none">
+            <input type="hidden" id="bb_hidden_shipment_type" name="shippment_type" style="display: none" />
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="portOfReceipt">Port of Receipt</label>
+                  <input type="text" class="form-control" id="portOfReceipt" name="port_of_receipt" required />
+                </div>
+                <div class="form-group">
+                  <label for="portOfLoading">Port of Loading</label>
+                  <input type="text" class="form-control" id="portOfLoading" name="port_of_loading" required />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="portOfDischarge">Port of Discharge</label>
+                  <input type="text" class="form-control" id="portOfDischarge" name="port_of_discharge" required />
+                </div>
+                <div class="form-group">
+                  <label for="finalPlaceOfDelivery">Final Place of Delivery</label>
+                  <input type="text" class="form-control" id="finalPlaceOfDelivery" name="final_place_of_delivery" required />
+                </div>
+              </div>
+            </div>
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input" id="bbHaz" name="commodity_type" />
+              <label class="form-check-label" for="bbHaz">Hazardous</label>
+            </div>
+            <div id="bbHazFields" style="display: none">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="bbUnNumber">UN Number</label>
+                    <select class="form-control" id="bbUnNumber" name="un_number">
+                      <option></option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="bbClass">Class</label>
+                    <select class="form-control" id="bbClass" name="haz_class">
+                      <option></option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="type_of_vessel">Type of Vessel</label>
+              <select class="form-control" id="type_of_vessel" name="type_of_vessel" required>
+                <option>Select</option>
+                <option value="Container">Container</option>
+                <option value="BulkCarrier">Bulk Carrier</option>
+                <option value="Tanker">Tanker</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="commodities">Commodities</label>
+              <select class="form-control" id="commodities" name="commodity" required>
+                <option>Type of Commodity</option>
+                <option value="commodity1">Commodity 1</option>
+                <option value="commodity2">Commodity 2</option>
+                <option value="commodity3">Commodity 3</option>
+                <option value="commodity4">Commodity 4</option>
+              </select>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="grossWeight">Gross Weight</label>
+              <input type="text" class="form-control" id="grossWeight" name="gross_weight" required />
+            </div>
+
+            <div class="form-group">
+              <label for="remark">More Information</label>
+              <textarea class="form-control" id="remark" name="remark" rows="3" placeholder="Any Special Request"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+
+          <form action="/general_quotation_AIR" method="post" id="Air_form" style="display: none">
+            <input type="hidden" id="air_hidden_shipment_type" name="shippment_type" style="display: none" />
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="portOfReceipt">Port of Receipt</label>
+                  <input type="text" class="form-control" id="portOfReceipt" name="port_of_receipt" required />
+                </div>
+                <div class="form-group">
+                  <label for="portOfLoading">Port of Loading</label>
+                  <input type="text" class="form-control" id="portOfLoading" name="port_of_loading" required />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="portOfDischarge">Port of Discharge</label>
+                  <input type="text" class="form-control" id="portOfDischarge" name="port_of_discharge" required />
+                </div>
+                <div class="form-group">
+                  <label for="finalPlaceOfDelivery">Final Place of Delivery</label>
+                  <input type="text" class="form-control" id="finalPlaceOfDelivery" name="final_place_of_delivery" required />
+                </div>
+              </div>
+            </div>
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input" id="airhaz" name="commodity_type" />
+              <label class="form-check-label" for="airhaz">Hazardous</label>
+            </div>
+            <div id="airhazFields" style="display: none">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="airUnNumber">UN Number</label>
+                    <select class="form-control" id="airUnNumber" name="un_number">
+                      <option></option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="airClass">Class</label>
+                    <select class="form-control" id="airClass" name="haz_class">
+                      <option></option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="commodities">Commodities</label>
+              <select class="form-control" id="commodities" name="commodity" required>
+                <option>Type of Commodity</option>
+                <option value="commodity1">Commodity 1</option>
+                <option value="commodity2">Commodity 2</option>
+                <option value="commodity3">Commodity 3</option>
+                <option value="commodity4">Commodity 4</option>
+              </select>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="grossWeight">Gross Weight</label>
+              <input type="text" class="form-control" id="grossWeight" name="gross_weight" required />
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label for="cbmCalculator">
+                    CBM Calculator
+                    <span class="alert-danger">Please Enter the values in Centimeter !</span>
+                  </label>
+                  <div class="row" style="border: 1px solid #ccc; padding: 10px">
+                    <div class="col">
+                      <label for="height">Height</label>
+                      <input type="text" class="form-control" id="height" name="height" placeholder="in cm" />
+                    </div>
+                    <div class="col">
+                      <label for="breadth">Breadth</label>
+                      <input type="text" class="form-control" id="breadth" name="breadth" placeholder="in cm" />
+                    </div>
+                    <div class="col">
+                      <label for="length">Length</label>
+                      <input type="text" class="form-control" id="length" name="length" placeholder="in cm" />
+                    </div>
+                    <div class="col">
+                      <label for="numberOfPackages">Number of Packages</label>
+                      <input type="text" class="form-control" id="numberOfPackages" name="number_of_packages" required />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="cbm">CBM</label>
+                <input type="text" class="form-control" id="cbm" name="cbm" required />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="remark">More Information</label>
+              <textarea class="form-control" id="remark" name="remark" rows="3" placeholder="Any Special Request"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+        </div>
+
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+          $(document).ready(function () {
+            function updateTextarea() {
+              let allContainerTypes = []
+              let allNumberOfContainers = []
+              $('.containerInputs').each(function () {
+                let containerType = $(this).find('.containerType').val()
+                let numberOfContainers = $(this).find('.numberOfContainers').val()
+          
+                allContainerTypes.push(containerType)
+                allNumberOfContainers.push(numberOfContainers)
+              })
+          
+              $('#allcontainerType').val(allContainerTypes.join('\n'))
+              $('#allnumberOfContainers').val(allNumberOfContainers.join('\n'))
+            }
+          
+            updateTextarea()
+          
+            $(document).on('change', '.containerType, .numberOfContainers', function () {
+              updateTextarea()
+            })
+            $(document).on('change', '.originalContainerType', function () {
+              let selectedContainerType = $(this).val()
+          
+              $('#allcontainerType').val(selectedContainerType + '\n' + $('#allcontainerType').val())
+            })
+          })
+        </script>
+        <script>
+          $(document).ready(function () {
+            $('#quotationType').change(function () {
+              var selectedType = $(this).val()
+              $('form').hide()
+              $('#' + selectedType + '_form').show()
+            })
+          })
+        </script>
+        <script>
+          $(document).ready(function () {
+            $('.addContainer').click(function () {
+              var clonedDiv = $('.containerInputs').first().clone()
+              clonedDiv.find('select').attr('id', 'containerType')
+              clonedDiv.find('input').attr('id', 'numberOfContainers')
+              $('.containerInputs').last().after(clonedDiv)
+            })
+            $('.removeContainer').click(function () {
+              if ($('.containerInputs').length > 1) {
+                $('.containerInputs').last().remove()
+              }
+            })
+          })
+        </script>
+        <script>
+          document.addEventListener('DOMContentLoaded', function () {
+            // LCL Hazardous checkbox
+            document.getElementById('haz').addEventListener('change', function () {
+              var hazFields = document.getElementById('hazFields')
+              if (this.checked) {
+                hazFields.style.display = 'block'
+              } else {
+                hazFields.style.display = 'none'
+              }
+            })
+          
+            // FCL Hazardous checkbox
+            document.getElementById('fclHaz').addEventListener('change', function () {
+              var hazFields = document.getElementById('fclHazFields')
+              if (this.checked) {
+                hazFields.style.display = 'block'
+              } else {
+                hazFields.style.display = 'none'
+              }
+            })
+          })
+          
+          // BB Hazardous checkbox
+          document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('bbHaz').addEventListener('change', function () {
+              var hazFields = document.getElementById('bbHazFields')
+              if (this.checked) {
+                hazFields.style.display = 'block'
+              } else {
+                hazFields.style.display = 'none'
+              }
+            })
+          })
+          
+          // Air Hazardous checkbox
+          document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('airhaz').addEventListener('change', function () {
+              var hazFields = document.getElementById('airhazFields')
+              if (this.checked) {
+                hazFields.style.display = 'block'
+              } else {
+                hazFields.style.display = 'none'
+              }
+            })
+          })
+        </script>
+        <script>
+          document.addEventListener('DOMContentLoaded', function () {
+            // Function to calculate CBM in m³ for each package
+            function calculateCBM(formId, cbmId) {
+              var height = parseFloat(document.getElementById(formId).querySelector('#height').value) || 0
+              var breadth = parseFloat(document.getElementById(formId).querySelector('#breadth').value) || 0
+              var length = parseFloat(document.getElementById(formId).querySelector('#length').value) || 0
+              var numberOfPackages = parseFloat(document.getElementById(formId).querySelector('#numberOfPackages').value) || 0
+              // Calculate CBM in m³ for each package
+              var cbmPerPackage = (length * breadth * height) / 1000000
+              // Calculate total CBM by multiplying by the number of packages
+              var totalCBM = cbmPerPackage * numberOfPackages
+              document.getElementById(formId).querySelector(cbmId).value = totalCBM.toFixed(3)
+            }
+          
+            // Attach event listeners to LCL form
+            document.querySelectorAll('#LCL_form #height, #LCL_form #breadth, #LCL_form #length, #LCL_form #numberOfPackages').forEach(function (element) {
+              element.addEventListener('keyup', function () {
+                if (document.getElementById('LCL_form').style.display !== 'none') {
+                  calculateCBM('LCL_form', '#cbm')
+                }
+              })
+            })
+          
+            // Attach event listeners to Air form
+            document.querySelectorAll('#Air_form #height, #Air_form #breadth, #Air_form #length, #Air_form #numberOfPackages').forEach(function (element) {
+              element.addEventListener('keyup', function () {
+                if (document.getElementById('Air_form').style.display !== 'none') {
+                  calculateCBM('Air_form', '#cbm')
+                }
+              })
+            })
+          })
+        </script>
+        <script>
+          document.getElementById('shippment_type').addEventListener('change', function () {
+            document.getElementById('lcl_hidden_shipment_type').value = this.value
+          })
+          document.getElementById('shippment_type').addEventListener('change', function () {
+            document.getElementById('fcl_hidden_shipment_type').value = this.value
+          })
+          document.getElementById('shippment_type').addEventListener('change', function () {
+            document.getElementById('bb_hidden_shipment_type').value = this.value
+          })
+          document.getElementById('shippment_type').addEventListener('change', function () {
+            document.getElementById('air_hidden_shipment_type').value = this.value
+          })
+        </script>
+        <script>
+          document.addEventListener('DOMContentLoaded', function () {
+            var hazCheckbox = document.getElementById('haz')
+            var hazFields = document.getElementById('hazFields')
+          
+            hazCheckbox.addEventListener('change', function () {
+              if (hazCheckbox.checked) {
+                hazFields.style.display = 'block'
+                document.getElementById('fclUnNumber').required = true
+                document.getElementById('fclClass').required = true
+              } else {
+                hazFields.style.display = 'none'
+                document.getElementById('fclUnNumber').required = false
+                document.getElementById('fclClass').required = false
+              }
+            })
+          })
+        </script>
+      </main>
+    </div>
+  </div>
+{% endblock %}

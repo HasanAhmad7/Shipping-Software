@@ -1,0 +1,55 @@
+<!-- navbar.html -->
+<nav class="col-md-2 d-none d-md-block bg-light sidebar">
+  <div class="sidebar-sticky">
+    <ul class="nav flex-column">
+      <li class="nav-item">
+        {% if 'role' in session %}
+          {% if session['role'] == 'Admin' %}
+            <a class="nav-link {% if request.path == url_for('admin_dashboard.admin_dashboard') %}active{% endif %}" href="{{ url_for('admin_dashboard.admin_dashboard') }}"><i class="fas fa-tachometer-alt mr-2"></i>Admin Dashboard</a>
+          {% elif session['role'] == 'Staff' %}
+            <a class="nav-link {% if request.path == url_for('staff_dashboard.staff_dashboard') %}active{% endif %}" href="{{ url_for('staff_dashboard.staff_dashboard') }}"><i class="fas fa-tachometer-alt mr-2"></i>Staff Dashboard</a>
+          {% else %}
+            <a class="nav-link {% if request.path == url_for('dashboard.dashboard') %}active{% endif %}" href="{{ url_for('dashboard.dashboard') }}"><i class="fas fa-tachometer-alt mr-2"></i>Dashboard</a>
+          {% endif %}
+        {% else %}
+          <a class="nav-link {% if request.path == url_for('dashboard.dashboard') %}active{% endif %}" href="{{ url_for('dashboard.dashboard') }}"><i class="fas fa-tachometer-alt mr-2"></i>Dashboard</a>
+        {% endif %}
+      </li>
+
+<!-- This part will only be visible to admin start -->
+      {% if 'role' in session and session['role'] == 'Admin' %}
+        
+        <li class="nav-item">
+          <a class="nav-link">
+            <i class="fas fa-people-roof mr-2"></i>Manage Staff
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.path == url_for('create_staff.create_staff') %}active{% endif %}" href="{{ url_for('create_staff.create_staff') }}"><i class="fas fa-user-plus mr-2"></i>Create Staff</a>
+        </li>
+      {% endif %}
+
+
+ <!-- This link will only be visible to staff and admin -->
+      {% if 'role' in session and session['role'] in ['Staff', 'Admin'] %}
+       
+        <li class="nav-item">
+          <a class="nav-link {% if request.path == url_for('admin_view_general_quotation.admin_view_general_quotation') %}active{% endif %}" href="{{ url_for('admin_view_general_quotation.admin_view_general_quotation') }}"><i class="fas fa-file-alt mr-2"></i>View Quotation</a>
+        </li>
+      {% endif %}
+
+
+<!--To ALL-->
+      <li class="nav-item">
+        <a class="nav-link  {% if request.path == url_for('general_quotation.general_quotation') %}active{% endif %}" href="{{ url_for('general_quotation.general_quotation') }}"><i class="fas fa-file-export mr-2"></i>General Quotation</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link"><i class="fas fa-user mr-2"></i> Profile</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link"><i class="fas fa-cog mr-2"></i> Settings</a>
+      </li>
+      <!-- Add more links as needed -->
+    </ul>
+  </div>
+</nav>

@@ -1,0 +1,260 @@
+.color_bar {
+    height: 3px;
+    background-color: #001927;
+}
+
+#color_bar_forPrint {
+    height: 0px;
+    background-color: #001927;
+}
+
+.containerquote {
+    border-bottom: 1px solid black;
+    display: flex;
+    justify-content: space-between;
+}
+
+.our-office {
+    border-right: 1px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 50%;
+    padding: 0 10px 10px 10px;
+    font-size: 14px;
+}
+
+.logo-container img {
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+
+}
+
+.company-name {
+    margin-top: 10px;
+}
+
+.company-address {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: left;
+    height: 100%;
+    font-size: 14px;
+}
+
+.customer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: left;
+    height: 100%;
+    width: 50%;
+    max-width: 50%;
+    padding: 0 10px 10px 10px;
+    font-size: 14px;
+
+}
+
+.customer-details {
+    text-align: left;
+}
+
+span.quoate-number {
+    font-style: italic;
+}
+
+.company-name,
+.date,
+.quotation-no,
+.To,
+.to_name {
+    font-weight: bold;
+}
+
+.quotation-no {
+    background-color: #066a94;
+    /* #326581 */
+    color: white;
+    width: max-content;
+    text-align: center;
+    margin: 0 0 10px 0;
+}
+
+.date {
+    padding: 5px 0 20px 0;
+}
+
+
+
+.quotation-container {
+    display: flex;
+    background-color: #066a94;
+    color: white;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid black;
+}
+
+.quotation {
+    font-size: 50px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+
+}
+
+.etf-container,
+.freight-charges-containers,
+.Origin-Charges-container,
+.Destination-Charges-container {
+    display: flex;
+    background-color: #066a94;
+    color: white;
+    justify-content: left;
+    border-top: 1px solid black;
+
+}
+
+.condition-container {
+    display: flex;
+    background-color: #066a94;
+    color: white;
+    justify-content: left;
+}
+
+.etf {
+    font-style: italic
+}
+
+select {
+    width: max-content;
+    background-color: #fff;
+    cursor: pointer;
+    border: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+select::after {
+    content: '\25BC';
+    font-size: 14px;
+    color: #333;
+    margin-left: -20px;
+}
+
+#autocompleteInput {
+    width: 20rem;
+    background-color: #fff;
+    cursor: pointer;
+    border: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+#autocompleteList {
+    position: absolute;
+    width: 20%;
+    background: white;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: none;
+    border: 1px solid #ccc;
+}
+
+#autocompleteList li {
+    cursor: pointer;
+}
+
+#autocompleteList li:hover {
+    background-color: #f0f0f0;
+}
+
+.EST_TABLE {
+    width: 100%;
+    table-layout: fixed;
+}
+
+
+table,
+th,
+td {
+    border: 1px solid black !important;
+    border-collapse: collapse;
+}
+
+
+
+.border_less_cell {
+    border: none !important;
+}
+
+.hight_cell {
+    background-color: #aad5ec81;
+}
+
+.thanks {
+    font-weight: bold;
+}
+
+.thanks,
+.footer-date,
+.place,
+.sign {
+    padding: 12px;
+}
+
+
+.condition-container {
+    margin-top: 10px
+}
+
+.condition {
+    padding: 5px;
+}
+
+.acceptedby-container {
+    display: flex;
+    justify-content: space-between;
+    background-color: #aad5ec81;
+}
+
+.accepedby,
+.accepedby-sign,
+.accepedby-date {
+    flex: 1;
+    margin: 10px;
+}
+
+.new_page {
+    page-break-before: always;
+}
+
+
+.addBtn,
+.removeBtn {
+    background: white;
+    color: #066a94;
+    width: max-content;
+    font-weight: bolder;
+    border: none;
+    border-radius: 10px;
+    transition: 0.5s;
+}
+
+.addBtn:hover,
+.removeBtn:hover {
+    background: #066a94;
+    color: white;
+}
+
+@media print {
+    .printnone {
+        display: none;
+    }
+}

@@ -1,0 +1,194 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Update Status For General Quotations
+{% endblock %}
+
+{% block content %}
+  <div class="container-fluid">
+    <div class="row">
+      {% include 'navbar.html' %}
+      <!-- Main content -->
+      <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+        <h2>Update Status For General Quotations</h2>
+        <div class="my-4 bg-light p-3">
+          <h3 class="text-secondary">Quotations</h3>
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>ID</th>
+                  <th>Type</th>
+                  <th>Commodity</th>
+                  <th>Gross Wt.</th>
+                  <th>Status</th>
+                  <th>Created By</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for quotation in quotations %}
+                  <tr>
+                    <td>{{ (quotations.page - 1) * quotations.per_page + loop.index }}</td>
+                    <td>{{ quotation.id }}</td>
+                    <td>{{ quotation.shippment_type }}</td>
+                    <td>{{ quotation.commodity }}</td>
+                    <td>{{ quotation.gross_weight }}</td>
+                    <td>{{ quotation.status }}</td>
+                    <td>{{ quotation.created_by }}</td>
+                    <td>
+                      <button type="button" class="btn btn-sm btn-primary view-btn" data-bs-toggle="modal" data-bs-target="#viewQuotationModal{{ quotation.id }}">View</button>
+                      <a href="{{ url_for('admin_view_general_quotation.delete_quotation', quotation_id=quotation.id) }}" class="btn btn-sm btn-danger">Delete</a>
+                      {% if quotation.status == 'Completed' %}
+                        <a href="{{ url_for('admin_quotation_template.admin_quotation_template', quotation_id=quotation.id) }}" class="btn btn-sm btn-success">View Quotation</a>
+                      {% endif %}
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          <div>
+            {% if quotations.has_prev %}
+              <a href="{{ url_for('admin_view_general_quotation.admin_view_general_quotation', page=quotations.prev_num) }}" class="btn btn-primary">Previous</a>
+            {% endif %}
+            {% if quotations.has_next %}
+              <a href="{{ url_for('admin_view_general_quotation.admin_view_general_quotation', page=quotations.next_num) }}" class="btn btn-primary">Next</a>
+            {% endif %}
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  {% for quotation in quotations %}
+    <div class="modal fade" id="viewQuotationModal{{ quotation.id }}" tabindex="-1" aria-labelledby="viewQuotationModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="viewQuotationModalLabel">Update Status</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>
+              <strong>ID:</strong> {{ quotation.id }}
+            </p>
+            <p>
+              <strong>Shipment Type:</strong> {{ quotation.shippment_type }}
+            </p>
+            <p>
+              <strong>Commodity:</strong> {{ quotation.commodity }}
+            </p>
+            <p>
+              <strong>Gross Weight:</strong>{{ quotation.gross_weight }}
+            </p>
+            {% if quotation.shippment_type == 'LCL' %}
+              <p>
+                <strong>CBM:</strong> {{ quotation.cbm }}
+              </p>
+              <p>
+                <strong>Number Of Packages:</strong> {{ quotation.number_of_packages }}
+              </p>
+            {% endif %}
+            {% if quotation.shippment_type == 'FCL' %}
+              <p>
+                <strong>Container Type:</strong> {{ quotation.container_type }}
+              </p>
+              <p>
+                <strong>Number Of Container:</strong> {{ quotation.number_of_containers }}
+              </p>
+            {% endif %}
+            {% if quotation.shippment_type == 'BB' %}
+              <p>
+                <strong>Type Of Vessel:</strong> {{ quotation.type_of_vessel }}
+              </p>
+            {% endif %}
+            {% if quotation.shippment_type == 'Air' %}
+              <p>
+                <strong>CBM:</strong> {{ quotation.cbm }}
+              </p>
+              <p>
+                <strong>Number Of Packages:</strong> {{ quotation.number_of_packages }}
+              </p>
+            {% endif %}
+            <p>
+              <strong>Remark:</strong> {{ quotation.remark }}
+            </p>
+            <p>
+              <strong>Port Of Receipt:</strong> {{ quotation.port_of_receipt }}
+            </p>
+            <p>
+              <strong>Port Of Loading:</strong> {{ quotation.port_of_loading }}
+            </p>
+            <p>
+              <strong>Port Of Discharge:</strong> {{ quotation.port_of_discharge }}
+            </p>
+            <p>
+              <strong>Final Place Of Delivery:</strong> {{ quotation.final_place_of_delivery }}
+            </p>
+            <p>
+              <strong>Commodity Type:</strong> {{ quotation.commodity_type }}
+            </p>
+            <p>
+              <strong>Un Number:</strong> {{ quotation.un_number }}
+            </p>
+            <p>
+              <strong>Class:</strong> {{ quotation.haz_class }}
+            </p>
+            <p>
+              <strong>Created By:</strong> {{ quotation.created_by }}
+            </p>
+            <p style="color: brown;">
+              <strong>Status:</strong> {{ quotation.status }}
+            </p>
+          </div>
+          <form id="updateStatusForm{{ quotation.id }}" method="POST" action="{{ url_for('admin_view_general_quotation.update_status') }}">
+            <input type="hidden" name="quotation_id" id="quotation_id" value="{{ quotation.id }}" />
+            <div class="col-md-6">
+              <label for="statusSelect{{ quotation.id }}" class="form-label">Update Status:</label>
+              <select class="form-select" id="statusSelect{{ quotation.id }}" name="status">
+                {% if quotation.status == 'Pending' %}
+                  <option value="Pending" selected>Pending</option>
+                {% else %}
+                  <option value="Pending">Pending</option>
+                {% endif %}
+                {% if quotation.status == 'In Progress' %}
+                  <option value="In Progress" selected>In Progress</option>
+                {% else %}
+                  <option value="In Progress">In Progress</option>
+                {% endif %}
+                {% if quotation.status == 'Completed' %}
+                  <option value="Completed" selected>Completed</option>
+                {% else %}
+                  <option value="Completed">Completed</option>
+                {% endif %}
+                {% if quotation.status == 'Rejected' %}
+                  <option value="Rejected" selected>Rejected</option>
+                {% else %}
+                  <option value="Rejected">Rejected</option>
+                {% endif %}
+              </select>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" form="updateStatusForm{{ quotation.id }}" class="btn btn-primary">Save changes</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+  <script>
+    const myModal = document.getElementById('myModal')
+    const myInput = document.getElementById('myInput')
+    
+    myModal.addEventListener('shown.bs.modal', () => {
+      myInput.focus()
+    })
+    
+    const myModalEl = document.getElementById('myModal')
+    myModalEl.addEventListener('hidden.bs.modal', (event) => {})
+  </script>
+{% endblock %}
