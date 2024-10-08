@@ -37,10 +37,10 @@ def general_quotation_LCL():
     user = GeneralUser.query.get(user_id)
     admin_staff_user = AdminStaffData.query.get(user_id)
 
-    if user:
-        username = user.username
-    elif admin_staff_user:
+     if user:
         username = admin_staff_user.username
+    elif admin_staff_user:
+        username = user.username
 
     port_of_receipt = request.form['port_of_receipt']
     port_of_loading = request.form['port_of_loading']
